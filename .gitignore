@@ -1,6 +1,8 @@
 venv/
 .idea/
 APT37/
-APT38
+APT38/
+.DS_Store
+
 
 
