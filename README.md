@@ -3,7 +3,6 @@
 - MITRE ATTACK code for making bundle.
 - Make json files and folders by object for beta version. It can be replaced database.
 - Searched object will not create relationship files
-- 
 
 
 
