@@ -27,6 +27,7 @@ filter_objs = {"techniques": Filter("type", "=", "attack-pattern"),
 searched_ids = list()
 searched_objs = list()
 
+
 def make_attack_dir(name):
     os.makedirs('./{0}'.format(name.replace('/', ' and ')))
     os.makedirs('./{0}/relationships'.format(name.replace('/', ' and ')))
@@ -48,10 +49,10 @@ def deter_types():
     return types.copy()
 
 
-def find_groups(target_groups):
+def find_groups(target_group):
     groups = list()
     for group in attack['groups']:
-        if group['name'] in target_groups:
+        if group['name'] == target_group:
             if not os.path.exists('./{0}'.format(group['name'].replace('/', ' and '))):
                 make_attack_dir(group['name'])
             with open('./{0}/{0}.json'.format(group['name'].replace('/', ' and ')), 'w') as f:
@@ -62,6 +63,7 @@ def find_groups(target_groups):
     return groups.copy()
 
 def find_relationships(obj):
+    types = deter_types()
 
     if not os.path.exists('./{0}'.format(obj['name'].replace('/', ' and '))):
         make_attack_dir(obj['name'])
@@ -91,7 +93,7 @@ def find_match_id(reference_id, domain):
 
     for obj in attack[domain]:
         if obj['id'] == reference_id:
-            print(obj)
+
             if not os.path.exists('./{0}'.format(obj['name'].replace('/', ' and '))):
                 make_attack_dir(obj['name'])
             #
@@ -106,18 +108,22 @@ def find_match_id(reference_id, domain):
 
 
 
-if __name__ == '__main__':
-    target_groups = ['APT38']
-    types = deter_types()
+def get_bundle_json(target_group):
 
-    objects = find_groups(target_groups)
+    objects = find_groups(target_group)
 
     for obj in objects:
         refs = find_relationships(obj)
 
     bundle = Bundle(searched_objs)
-    with open('{0}-bundle.json'.format('APT38'), 'w') as f:
+    with open('{0}-bundle.json'.format(target_group), 'w') as f:
         f.write(bundle.serialize())
+
+    return bundle.serialize()
+
+if __name__ == '__main__':
+    get_bundle_json('APT38')
+
 
 
 
